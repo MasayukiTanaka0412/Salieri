@@ -19,4 +19,59 @@ In the Japanese Animation [Steins;Gate Zero](http://steinsgate0-anime.com/), the
 I love the animation, so I first thought to name this project "Amadeus".  
 But Amadeus is so perferct, I decided to keep the project name "Amadeus" for future use. When I come up really brilliant idea, I will name it "Amadeus"  
 
-For this project, I choose another great music compoer, but not as great as Wolfgang Amadeus Mozart. That is "Antonio Salieri"
+For this project, I choose another great music compoer, but not as great as Wolfgang Amadeus Mozart. That is "Antonio Salieri"  
+
+## USAGE
+### Sarieli CLI
+Search Keyword "Microsoft Azure" on Google and get the content of top 100 results  
+
+SalieriCLI "Microsoft Azure"  
+
+
+
+
+
+Scraping !!
+
+Once Analyzed, world list with occurence will be shown  
+
+[2450]  azure  
+[1293]  cloud  
+[1233]  microsoft  
+[1097]  service  
+[1006]  data  
+[486]   use  
+[415]   support  
+[384]   solution  
+[373]   application  
+[362]   learn  
+[361]   management  
+[313]   s  
+[312]   storage  
+[305]   can  
+[302]   product  
+[286]   security  
+[282]   1  
+[277]   resource  
+[274]   platform  
+[271]   machine  
+[264]   business  
+
+You can find simlar words
+
+Enter keyword to analyze and press enter
+machine
+
+Word: machine  Position in vocabulary: 50
+linux   0.9990176
+products        0.9986746
+get     0.9985769
+workloads       0.9984719
+at      0.9984297
+windows 0.9984263
+virtual 0.9983898
+ai      0.998272
+learning        0.9981397
+tools   0.9978774
+
+Press Enter to exit
