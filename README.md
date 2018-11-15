@@ -27,14 +27,8 @@ Search Keyword "Microsoft Azure" on Google and get the content of top 100 result
 ```
 SalieriCLI "Microsoft Azure"  
 ```
-
-
-
-
-Scraping !!
-
 Once Analyzed, world list with occurence will be shown  
-
+```
 [2450]  azure  
 [1293]  cloud  
 [1233]  microsoft  
@@ -56,9 +50,9 @@ Once Analyzed, world list with occurence will be shown
 [274]   platform  
 [271]   machine  
 [264]   business  
-
+```
 You can find simlar words
-
+```
 Enter keyword to analyze and press enter
 machine
 
@@ -75,3 +69,4 @@ learning        0.9981397
 tools   0.9978774
 
 Press Enter to exit
+```
