@@ -1,4 +1,4 @@
-# Project Salieri2
+# Project Salieri
 ## What is this project?
 Get contents from various sources and analyze
 
