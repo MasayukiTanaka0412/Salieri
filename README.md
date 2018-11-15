@@ -24,9 +24,9 @@ For this project, I choose another great music compoer, but not as great as Wolf
 ## USAGE
 ### Sarieli CLI
 Search Keyword "Microsoft Azure" on Google and get the content of top 100 results  
-
+```
 SalieriCLI "Microsoft Azure"  
-
+```
 
 
 
