@@ -28,11 +28,31 @@ namespace SalieriCore.Word2VecHelper
         {
             builder.WithTrainFile(TrainFile);
             builder.WithOutputFile(OutputFile);
-            builder.WithDebug(1);
+            builder.WithDebug(2);
+            builder.WithBinary(1);
 
             W2C = builder.Build();
             W2C.TrainModel();
         }
 
+        public BestWord[] GetBestWordsByDistance(string keyword)
+        {
+            var distance = new Distance(OutputFile);
+            BestWord[] bestwords = distance.Search(keyword);
+            return bestwords;
+        }
+
+        public IEnumerable<string> GetBestWordsByDistanceInStringFormat(string keyword)
+        {
+            
+            BestWord[] bestwords = GetBestWordsByDistance(keyword);
+            List<string> result = new List<string>();
+            foreach(BestWord best in bestwords)
+            {
+                result.Add(best.Word + "\t" + best.Distance);
+            }
+
+            return result;
+        }
     }
 }

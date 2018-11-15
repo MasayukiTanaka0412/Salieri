@@ -18,10 +18,21 @@ namespace SalieriCLI
             string mergedTextFile = @"c:\temp\merged.txt";
             string trainedFile = @"c:\temp\trained.bin";
 
+            GoogleLoader loader = new GoogleLoader();
+            if (args.Length >0)
+            {
+                loader.keywords = args[0];
+            }
+            else
+            {
+                Console.WriteLine("Input keywords and press enter");
+                loader.keywords = Console.ReadLine();
+            }
+
             Console.WriteLine("Start Salieri");
             Console.WriteLine("Scraping !!");
-            GoogleLoader loader = new GoogleLoader();
-            loader.keywords = "disclosure management software";
+            
+            //loader.keywords = "disclosure management software";
             Task<string> result = loader.LoadAsync();
             result.Wait();
 
@@ -47,7 +58,23 @@ namespace SalieriCLI
             w2CHelper.Train();
 
             Console.WriteLine("Completed");
-            Console.WriteLine("Press any key to exit");
+
+            while (true)
+            {
+                Console.WriteLine("Enter keyword to analyze and press enter");
+                string searchkey = Console.ReadLine();
+                if(string.IsNullOrEmpty(searchkey))
+                {
+                    break;
+                }
+                IEnumerable<string> bestwords = w2CHelper.GetBestWordsByDistanceInStringFormat(searchkey);
+                foreach (string s in bestwords)
+                {
+                    Console.WriteLine(s);
+                }
+
+                Console.WriteLine("Enter keyword to analyze and press enter, or just press enter to exit");
+            }
             Console.ReadLine();
         }
     }

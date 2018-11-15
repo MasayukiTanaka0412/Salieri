@@ -17,7 +17,7 @@ namespace SalieriCore.Corpus
             {
                 if (!string.IsNullOrEmpty(dao.Content))
                 {
-                    MergedText = MergedText + " " + dao.Content;
+                    MergedText = MergedText + " " + dao.Content.ToLower();
                 }
             }
         }
