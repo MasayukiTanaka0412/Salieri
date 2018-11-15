@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Word2Vec.Net</name>
+    </assembly>
+    <members>
+        <member name="M:Word2Vec.Net.Distance.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="fileName">path to binary file created by Word2Vec</param>
+        </member>
+        <member name="M:Word2Vec.Net.Distance.Search(System.String)">
+            <summary>
+            search nearest words to <param name="intext"></param>
+            </summary>
+            <returns>nearest words</returns>
+        </member>
+        <member name="T:Word2Vec.Net.Utils.FileStreamExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Word2Vec.Net.Utils.FileStreamExtensions.ReadWord(System.IO.FileStream)">
+            <summary>
+            
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Word2Vec.Net.Word2Vec">
+            <summary>
+            the class an implementation of Google Word2Vec algorhitm
+            </summary>
+        </member>
+        <member name="M:Word2Vec.Net.Word2Vec.SearchVocab(System.String)">
+            <summary>
+            Searching the word position in the vocabulary
+            </summary>
+            <param name="word"></param>
+            <returns>position of a word in the vocabulary; if the word is not found, returns -1</returns>
+        </member>
+        <member name="M:Word2Vec.Net.Word2Vec.AddWordToVocab(System.String)">
+            <summary>
+            Adds a word to the vocabulary
+            </summary>
+            <param name="word"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Word2Vec.Net.Word2Vec.SortVocab">
+            <summary>
+            Sorts the vocabulary by frequency using word counts
+            </summary>
+        </member>
+        <member name="M:Word2Vec.Net.Word2Vec.TrainModel">
+            <summary>
+            train model
+            WORD VECTOR estimation method
+            </summary>
+        </member>
+        <member name="M:Word2Vec.Net.Word2VecAnalysisBase.#ctor(System.String)">
+            <summary>
+            Basic class for analysis algorithms( distnace, analogy, commpute-accuracy)
+            </summary>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Word2Vec.Net.Word2VecBuilder.WithTrainFile(System.String)">
+            <summary>
+            adding train file path
+            </summary>
+            <param name="trainFileName">adding train file path</param>
+            <returns></returns>
+        </member>
+        <member name="M:Word2Vec.Net.Word2VecBuilder.WithSaveVocubFile(System.String)">
+            <summary>
+            adding file path for saving vocabulary
+            </summary>
+            <param name="saveVocubFileName">file path for saving vocabulary</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
