@@ -14,8 +14,8 @@ namespace SalieriWeb
         {
             // Web API configuration and services
             // ベアラー トークン認証のみを使用するように、Web API を設定します。
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            //config.SuppressDefaultHostAuthentication();
+            //config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             // JSON データにはキャメル ケースを使用します。
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

@@ -28,12 +28,14 @@ namespace SalieriCore.Loader
 
         public async Task<string> LoadAsync()
         {
+            Console.WriteLine("Load Async start");
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             var doc = default(IHtmlDocument);
             using (var client = new HttpClient())
             using (var stream = await client.GetStreamAsync(new Uri(baseURL + HttpUtility.UrlEncode(keywords))))
             {
+                Console.WriteLine("Loading!!");
                 // AngleSharp.Parser.Html.HtmlParserオブジェクトにHTMLをパースさせる
                 var parser = new HtmlParser();
                 doc = await parser.ParseAsync(stream);
@@ -58,11 +60,47 @@ namespace SalieriCore.Loader
             return "success";
         }
 
+        public string Load()
+        {
+            Console.WriteLine("Load start");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+            var doc = default(IHtmlDocument);
+            using (var client = new HttpClient())
+            {
+                Task<Stream> task = client.GetStreamAsync(new Uri(baseURL + HttpUtility.UrlEncode(keywords)));
+                task.Wait();
+                var parser = new HtmlParser();
+                Task<IHtmlDocument>task2 = parser.ParseAsync(task.Result);
+                task2.Wait();
+                doc = task2.Result;
+
+                Contents = new List<ContentDao>();
+
+                IHtmlCollection<IElement> resultcollection = doc.GetElementsByClassName("r");
+                foreach (IElement resultElement in resultcollection)
+                {
+                    Debug.WriteLine(resultElement.InnerHtml);
+                    ContentDao content = new ContentDao();
+
+                    MatchCollection mc = Regex.Matches(resultElement.InnerHtml, "q=(?<url>.+)&amp;sa");
+                    if (mc.Count > 0)
+                    {
+                        content.URL = mc[0].Groups["url"].Value;
+                    }
+                    Contents.Add(content);
+                }
+            }
+            
+            LoadPages();
+            return "success";
+        }
+
         private void LoadPages()
         {
             foreach(ContentDao content in Contents)
             {
-                if (!content.URL.Contains(",pdf"))
+                if (!(string.IsNullOrEmpty(content.URL) || content.URL.Contains(",pdf")))
                 {
                     try
                     {
