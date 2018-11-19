@@ -31,7 +31,7 @@
         </div>
         <div id="word_map_area" style="padding: 20px; color: #FFFFFF; text-align: center" >
             Words have similar concept<br />
-            <div id="word2vec_result">{{similarWords}}</div>
+            <div id="word2vec_result">{{similarWordsStatus}}</div>
             <canvas id="wvCanvas" width="700" height="500"></canvas>
         </div>
         <div id="result_area" style="padding: 20px; color: #FFFFFF;text-align: center">
@@ -44,13 +44,13 @@
             data: {
                 searchKeywords: 'Please input keywords',
                 wcStatus: 'Word cloud will be shown here',
-                similarWords :''
+                similarWordsStatus :''
 
             },
             methods: {
                 handleStart: function (event) {
                     alert('Search ' + app.searchKeywords);
-                    app.wcStatus = 'Searching';
+                    app.wcStatus = 'Searching!!';
 
                     //call API
                     axios.get('/api/WordCloud?keyword=' + encodeURI(app.searchKeywords))
@@ -77,7 +77,8 @@
         })
 
         function wordClicked(item, dimension, event) {
-            alert(item);
+            //alert(item);
+            app.similarWordsStatus = 'Searching!!'
             axios.get('/api/Word2Vec?keyword=' + encodeURI(item[0]))
                 .then(function (res) {
                     var resultObj = res.data;
@@ -90,6 +91,7 @@
                     }
 
                     WordCloud(document.getElementById('wvCanvas'), { list: resultArray });
+                    app.similarWordsStatus = ''
                     
                 })
                 .catch(function (res) {
