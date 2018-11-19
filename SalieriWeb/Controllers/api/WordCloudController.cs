@@ -11,6 +11,7 @@ using SalieriCore.WordCloud;
 using SalieriCore.Word2VecHelper;
 using SalieriWeb.Models;
 using Sparc.TagCloud;
+using System.IO;
 
 namespace SalieriWeb.Controllers.api
 {
@@ -35,10 +36,21 @@ namespace SalieriWeb.Controllers.api
             WcGenerator wc = new WcGenerator();
             wc.Content = corpus.MergedText;
             wc.Analyze();
-
+            WriteCorpus(corpus.MergedText);
             return wc.GetTagList();
         }
 
+        private void WriteCorpus(string content)
+        {
+
+            string filepath = Path.GetTempPath() + "corpus.txt";
+            
+            using (StreamWriter sw = new StreamWriter(filepath))
+            {
+                sw.WriteLine(content);
+                sw.WriteLine("");
+            }
+        }
         
     }
 }

@@ -31,7 +31,8 @@
         </div>
         <div id="word_map_area" style="padding: 20px; color: #FFFFFF; text-align: center" >
             Words have similar concept<br />
-            Similar words will be shown here
+            <div id="word2vec_result">{{similarWords}}</div>
+            <canvas id="wvCanvas" width="700" height="500"></canvas>
         </div>
         <div id="result_area" style="padding: 20px; color: #FFFFFF;text-align: center">
             Search Result(s)<br />
@@ -42,7 +43,9 @@
             el: '#app',
             data: {
                 searchKeywords: 'Please input keywords',
-                wcStatus:'Word cloud will be shown here'
+                wcStatus: 'Word cloud will be shown here',
+                similarWords :''
+
             },
             methods: {
                 handleStart: function (event) {
@@ -62,7 +65,7 @@
                                 resultArray.push(element);
                             }
 
-                            WordCloud(document.getElementById('wcCanvas'), { list: resultArray });
+                            WordCloud(document.getElementById('wcCanvas'), { list: resultArray, click:wordClicked });
                             app.wcStatus = '';
                         })
                         .catch(function (res) {
@@ -72,6 +75,28 @@
                 }
             }
         })
+
+        function wordClicked(item, dimension, event) {
+            alert(item);
+            axios.get('/api/Word2Vec?keyword=' + encodeURI(item[0]))
+                .then(function (res) {
+                    var resultObj = res.data;
+                    app.similarWords = resultObj;
+                    var resultArray = [];
+                    var scale = 150 / resultObj[0].distance;
+                    for (var i = 0; i < resultObj.length; i++) {
+                        var element = [resultObj[i].word, resultObj[i].distance * scale];
+                        resultArray.push(element);
+                    }
+
+                    WordCloud(document.getElementById('wvCanvas'), { list: resultArray });
+                    
+                })
+                .catch(function (res) {
+                    app.wcResult = res.data;
+                    console.log(res);
+                })
+        }
     </script>
     <script>
         //WordCloud(document.getElementById('wcCanvas'), { list: [['foo', 200], ['bar', 100]] });

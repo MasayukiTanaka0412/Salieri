@@ -52,7 +52,7 @@ namespace SalieriCLI
             Console.WriteLine(wc.GetTagListByString());
 
             Console.WriteLine("Vectorizing!!");
-            W2CHelper w2CHelper = new W2CHelper();
+            W2VHelper w2CHelper = new W2VHelper();
             w2CHelper.TrainFile = mergedTextFile;
             w2CHelper.OutputFile = trainedFile;
             w2CHelper.Train();

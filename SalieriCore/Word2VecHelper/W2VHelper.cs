@@ -8,7 +8,7 @@ using Word2Vec.Net;
 
 namespace SalieriCore.Word2VecHelper
 {
-    public class W2CHelper
+    public class W2VHelper
     {
         private Word2VecBuilder builder;
 
@@ -18,7 +18,7 @@ namespace SalieriCore.Word2VecHelper
 
         public Word2Vec.Net.Word2Vec W2C { get; set; }
 
-        public W2CHelper()
+        public W2VHelper()
         {
             builder = Word2VecBuilder.Create();
             

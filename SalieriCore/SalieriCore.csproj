@@ -67,7 +67,7 @@
     <Compile Include="Dao\ContentDao.cs" />
     <Compile Include="Loader\GoogleLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Word2VecHelper\W2CHelper.cs" />
+    <Compile Include="Word2VecHelper\W2VHelper.cs" />
     <Compile Include="WordCloud\WcGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
