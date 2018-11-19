@@ -11,6 +11,7 @@
     <title>Salieri (alpha version)</title>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="~/Scripts/wordcloud2.js"></script>
 </head>
 <body style="background-color: #000000">
     <div id="app">
@@ -23,15 +24,16 @@
                 <input id="btnStart" name="btnStart" type="button" value="Start" v-on:click="handleStart"/>
             </form>
         </div>
-        <div id="word_cloud_area" style="padding: 20px; color: #FFFFFF">
+        <div id="word_cloud_area" style="padding: 20px; color: #FFFFFF;text-align: center" >
             Word Cloud<br />
-            <div id="word_cloud_result">{{wcResult}}</div>
+            <div id="word_cloud_result">{{wcStatus}}</div>
+            <canvas id="wcCanvas" width="700" height="500"></canvas>
         </div>
-        <div id="word_map_area" style="padding: 20px; color: #FFFFFF">
-            Word Map<br />
-            word Map will be shown here
+        <div id="word_map_area" style="padding: 20px; color: #FFFFFF; text-align: center" >
+            Words have similar concept<br />
+            Similar words will be shown here
         </div>
-        <div id="result_area" style="padding: 20px; color: #FFFFFF">
+        <div id="result_area" style="padding: 20px; color: #FFFFFF;text-align: center">
             Search Result(s)<br />
         </div>
     </div>
@@ -40,25 +42,39 @@
             el: '#app',
             data: {
                 searchKeywords: 'Please input keywords',
-                wcResult: 'Word cloud will be shown here'
+                wcStatus:'Word cloud will be shown here'
             },
             methods: {
                 handleStart: function (event) {
                     alert('Search ' + app.searchKeywords);
-                    app.wcResult = 'Searching';
+                    app.wcStatus = 'Searching';
 
                     //call API
                     axios.get('/api/WordCloud?keyword=' + encodeURI(app.searchKeywords))
                         .then(function (res) {
-                            app.wcResult = res.data
+                            //app.wcResult = res.data;
+                            //var resultObj = JSON.parse(res.data);
+                            var resultObj = res.data;
+                            var resultArray = [];
+                            var scale = 150 / resultObj[0].count;
+                            for (var i = 0; i < resultObj.length; i++) {
+                                var element = [resultObj[i].text, resultObj[i].count * scale];
+                                resultArray.push(element);
+                            }
+
+                            WordCloud(document.getElementById('wcCanvas'), { list: resultArray });
+                            app.wcStatus = '';
                         })
                         .catch(function (res) {
-                            app.wcResult = res.data
-                            console.log(res)
+                            app.wcResult = res.data;
+                            console.log(res);
                         })
                 }
             }
         })
+    </script>
+    <script>
+        //WordCloud(document.getElementById('wcCanvas'), { list: [['foo', 200], ['bar', 100]] });
     </script>
 </body>
 </html>

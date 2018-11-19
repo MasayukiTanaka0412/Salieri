@@ -9,9 +9,12 @@ using SalieriCore.Loader;
 using SalieriCore.Corpus;
 using SalieriCore.WordCloud;
 using SalieriCore.Word2VecHelper;
+using SalieriWeb.Models;
+using Sparc.TagCloud;
 
 namespace SalieriWeb.Controllers.api
 {
+    
     public class WordCloudController : ApiController
     {
         // GET: api/WordCloud
@@ -21,7 +24,7 @@ namespace SalieriWeb.Controllers.api
         }
 
         // GET: api/WordCloud/5
-        public string Get(string keyword)
+        public IEnumerable<TagCloudTag> Get(string keyword)
         {
             GoogleLoader loader = new GoogleLoader();
             loader.keywords = loader.keywords = keyword;
@@ -32,7 +35,8 @@ namespace SalieriWeb.Controllers.api
             WcGenerator wc = new WcGenerator();
             wc.Content = corpus.MergedText;
             wc.Analyze();
-            return wc.GetTagListByString();
+
+            return wc.GetTagList();
         }
 
         
