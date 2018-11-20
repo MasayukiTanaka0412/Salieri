@@ -15,17 +15,26 @@ using SalieriCore.Dao;
 using System.IO;
 using System.Net;
 using System.Threading;
+using NMeCab;
+using System.Web.Hosting;
 
 namespace SalieriCore.Loader
 {
     public class GoogleLoader
     {
-        static string baseURL = "https://www.google.co.jp/search?num=100&lr=lang_en&q=";
+        //static string baseURL = "https://www.google.co.jp/search?num=100&lr=lang_en&q=";
+        static string baseURL = "https://www.google.co.jp/search?num=100&lr=lang_ja&q=";
         public string keywords { get; set;}
 
         public ICollection<ContentDao> Contents { get; set; }
 
-        public GoogleLoader() { }
+        public MeCabTagger Tagger { get; set; }
+
+        public GoogleLoader() {
+            MeCabParam param = new MeCabParam();
+            param.DicDir = HostingEnvironment.ApplicationPhysicalPath + @"App_Data\ipadic";
+            Tagger = MeCabTagger.Create(param);
+        }
 
         public string Load()
         {
@@ -129,6 +138,7 @@ namespace SalieriCore.Loader
                                     content.Content = content.Content + " " + removeTag(element.InnerHtml);
                                 }
                             }
+                            Tokenize(content);
                             task.Result.Close();
                         }catch(Exception e)
                         {
@@ -156,6 +166,40 @@ namespace SalieriCore.Loader
             //newStr = Regex.Replace(newStr, @"^$", string.Empty, RegexOptions.Multiline);
             newStr = Regex.Replace(newStr, @"\s{2,}", " ");
             return newStr;
+        }
+
+        private void Tokenize(ContentDao dao)
+        {
+            //Tagger.OutPutFormatType = "wakati";
+            //string result = Tagger.Parse(dao.Content);
+            //dao.Content = result;
+
+            string result = string.Empty;
+            MeCabNode node = Tagger.ParseToNode(dao.Content);
+            while (node != null)
+            {
+                if (node.CharType > 0)
+                {
+                    //Console.WriteLine(node.Surface + "\t" + node.Feature);
+                    string feature = node.Feature;
+                    if(!(feature.StartsWith("助") ||
+                            feature.StartsWith("フィラー") ||
+                            feature.StartsWith("記号")||
+                            feature.Contains("接尾")　||
+                            feature.Contains("非自立") ||
+                            feature.Contains("接頭")
+                        ))
+                    {
+                        if(node.Surface.Length > 1) {
+                            result = result + node.Surface + " ";
+                        }
+                    }
+                }
+                node = node.Next;
+            }
+
+            dao.Content = result;
+
         }
 
     }
