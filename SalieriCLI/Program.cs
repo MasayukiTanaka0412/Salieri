@@ -33,8 +33,8 @@ namespace SalieriCLI
             Console.WriteLine("Scraping !!");
             
             //loader.keywords = "disclosure management software";
-            Task<string> result = loader.LoadAsync();
-            result.Wait();
+            string result = loader.Load();
+            
 
             Console.WriteLine("Generating Corpus");
             Corpus corpus = new Corpus(loader.Contents);

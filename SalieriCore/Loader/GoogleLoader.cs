@@ -14,6 +14,7 @@ using System.Diagnostics;
 using SalieriCore.Dao;
 using System.IO;
 using System.Net;
+using System.Threading;
 
 namespace SalieriCore.Loader
 {
@@ -26,19 +27,24 @@ namespace SalieriCore.Loader
 
         public GoogleLoader() { }
 
-        public async Task<string> LoadAsync()
+        public string Load()
         {
             Console.WriteLine("Load Async start");
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             var doc = default(IHtmlDocument);
             using (var client = new HttpClient())
-            using (var stream = await client.GetStreamAsync(new Uri(baseURL + HttpUtility.UrlEncode(keywords))))
             {
+                Task<Stream> t  =  client.GetStreamAsync(new Uri(baseURL + HttpUtility.UrlEncode(keywords)));
+                t.Wait();
+                Stream stream = t.Result;
+
                 Console.WriteLine("Loading!!");
                 // AngleSharp.Parser.Html.HtmlParserオブジェクトにHTMLをパースさせる
                 var parser = new HtmlParser();
-                doc = await parser.ParseAsync(stream);
+                Task<IHtmlDocument> task = parser.ParseAsync(stream);
+                task.Wait();
+                doc = task.Result;
 
                 Contents = new List<ContentDao>();
 
@@ -55,63 +61,66 @@ namespace SalieriCore.Loader
                     }
                     Contents.Add(content);
                 }
+                stream.Close();
             }
             LoadPages();
             return "success";
         }
 
-        public string Load()
-        {
-            Console.WriteLine("Load start");
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+        
 
-            var doc = default(IHtmlDocument);
-            using (var client = new HttpClient())
-            {
-                Task<Stream> task = client.GetStreamAsync(new Uri(baseURL + HttpUtility.UrlEncode(keywords)));
-                task.Wait();
-                var parser = new HtmlParser();
-                Task<IHtmlDocument>task2 = parser.ParseAsync(task.Result);
-                task2.Wait();
-                doc = task2.Result;
-
-                Contents = new List<ContentDao>();
-
-                IHtmlCollection<IElement> resultcollection = doc.GetElementsByClassName("r");
-                foreach (IElement resultElement in resultcollection)
-                {
-                    Debug.WriteLine(resultElement.InnerHtml);
-                    ContentDao content = new ContentDao();
-
-                    MatchCollection mc = Regex.Matches(resultElement.InnerHtml, "q=(?<url>.+)&amp;sa");
-                    if (mc.Count > 0)
-                    {
-                        content.URL = mc[0].Groups["url"].Value;
-                    }
-                    Contents.Add(content);
-                }
-            }
-            
-            LoadPages();
-            return "success";
-        }
+        
 
         private void LoadPages()
         {
-            foreach(ContentDao content in Contents)
+            List<Task> tasks = new List<Task>();
+            Dictionary<Task<Stream>,ContentDao> taskDic = new Dictionary<Task<Stream>, ContentDao>();
+            //ServicePointManager.DefaultConnectionLimit = 200;
+            foreach (ContentDao content in Contents)
             {
                 if (!(string.IsNullOrEmpty(content.URL) || content.URL.Contains(",pdf")))
                 {
+                    Console.WriteLine("Loading!! " + content.URL);
+                    var client = new HttpClient();
                     try
                     {
-                        using (var client = new HttpClient())
-                        {
-                            Task<Stream> resp = client.GetStreamAsync(new Uri(content.URL));
-                            resp.Wait();
+                        client.Timeout = TimeSpan.FromSeconds(20);
+                        Task<Stream> resp = client.GetStreamAsync(new Uri(content.URL));
+                        tasks.Add(resp);
+                        taskDic.Add(resp, content);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error!! " + e.Message);
+                    }
+                }
+            }
 
+            Task t = Task.WhenAll(tasks.ToArray());
+            try
+            {
+                t.Wait();
+            }catch(Exception e)
+            {
+                Console.WriteLine("Error!! " + e.Message);
+            }
+
+            List<Task> parsTasks = new List<Task>();
+            foreach (Task<Stream> task in tasks)
+            {
+                if(!(task.IsCanceled || task.IsFaulted))
+                {
+                    ContentDao content = taskDic[task];
+                    var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                    var token = cts.Token;
+
+                    var pT = Task.Run(()=>{
+                        Console.WriteLine("Parsing!! " + content.URL);
+                        try
+                        {
                             var doc = default(IHtmlDocument);
                             var parser = new HtmlParser();
-                            doc = parser.Parse(resp.Result);
+                            doc = parser.Parse(task.Result);
                             IHtmlCollection<IElement> elements = doc.GetElementsByTagName("body");
                             foreach (IElement element in elements)
                             {
@@ -120,17 +129,17 @@ namespace SalieriCore.Loader
                                     content.Content = content.Content + " " + removeTag(element.InnerHtml);
                                 }
                             }
-                            resp.Result.Close();
-
+                            task.Result.Close();
+                        }catch(Exception e)
+                        {
+                            Console.WriteLine("Error!! " + e.Message);
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error:" + e.Message);
-                        Debug.WriteLine(e.StackTrace);
-                    }
+                    },token);
+                    parsTasks.Add(pT);
                 }
             }
+            Task t2 = Task.WhenAll(parsTasks.ToArray());
+            t2.Wait();
         }
 
         private string removeTag(string intext)
