@@ -20,25 +20,23 @@ using System.Web.Hosting;
 
 namespace SalieriCore.Loader
 {
-    public class GoogleLoader : WebLoader
+    public class HTMLLoader :WebLoader
     {
-        //static string baseURL = "https://www.google.co.jp/search?num=100&lr=lang_en&q=";
-        static string baseURL = "https://www.google.co.jp/search?num=100&lr=lang_ja&q=";
-        public string keywords { get; set;}
+        public string sourceURL { get; set; }
+        public HTMLLoader() : base()
+        {
 
-
-        public GoogleLoader():base() {
         }
 
         public string Load()
         {
-            Console.WriteLine("Load Async start");
+            Console.WriteLine("Load start");
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             var doc = default(IHtmlDocument);
             using (var client = new HttpClient())
             {
-                Task<Stream> t  =  client.GetStreamAsync(new Uri(baseURL + HttpUtility.UrlEncode(keywords)));
+                Task<Stream> t = client.GetStreamAsync(new Uri(sourceURL));
                 t.Wait();
                 Stream stream = t.Result;
 
@@ -51,17 +49,12 @@ namespace SalieriCore.Loader
 
                 Contents = new List<ContentDao>();
 
-                IHtmlCollection<IElement> resultcollection = doc.GetElementsByClassName("r");
-                foreach(IElement resultElement in resultcollection)
+                IHtmlCollection<IElement> resultcollection = doc.GetElementsByTagName("a");
+                foreach (IElement resultElement in resultcollection)
                 {
-                    Debug.WriteLine(resultElement.InnerHtml);
+                    Debug.WriteLine(resultElement.GetAttribute("href"));
                     ContentDao content = new ContentDao();
-
-                    MatchCollection mc = Regex.Matches(resultElement.InnerHtml, "q=(?<url>.+)&amp;sa");
-                    if(mc.Count> 0)
-                    {
-                        content.URL = mc[0].Groups["url"].Value;   
-                    }
+                    content.URL = resultElement.GetAttribute("href");
                     Contents.Add(content);
                 }
                 stream.Close();
@@ -73,3 +66,4 @@ namespace SalieriCore.Loader
 
     }
 }
+

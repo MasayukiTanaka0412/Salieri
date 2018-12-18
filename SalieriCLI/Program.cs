@@ -13,31 +13,30 @@ namespace SalieriCLI
 {
     class Program
     {
+        static string mergedTextFile = @"c:\temp\merged.txt";
+        static string trainedFile = @"c:\temp\trained.bin";
+
         static void Main(string[] args)
         {
-            string mergedTextFile = @"c:\temp\merged.txt";
-            string trainedFile = @"c:\temp\trained.bin";
-
-            GoogleLoader loader = new GoogleLoader();
-            if (args.Length >0)
+            Corpus corpus = null;
+            if (args.Length <2 )
             {
-                loader.keywords = args[0];
+                Console.WriteLine("Usage SalieriCLI Google keywords");
+                Console.WriteLine("Or SalieriCLI HTML uri");
+                Console.WriteLine("Press Enter to Exit");
+                Console.ReadLine();
             }
             else
             {
-                Console.WriteLine("Input keywords and press enter");
-                loader.keywords = Console.ReadLine();
+                if ("Google".Equals(args[0]))
+                {
+                    corpus =LoadFromGoogle(args[1]);
+                }
+                else if ("HTML".Equals(args[0])){
+                    corpus = LoadFromHTML(args[1]);
+                }
             }
 
-            Console.WriteLine("Start Salieri");
-            Console.WriteLine("Scraping !!");
-            
-            //loader.keywords = "disclosure management software";
-            string result = loader.Load();
-            
-
-            Console.WriteLine("Generating Corpus");
-            Corpus corpus = new Corpus(loader.Contents);
             //Console.WriteLine(corpus.MergedText);
             using (StreamWriter sw = new StreamWriter(mergedTextFile))
             {
@@ -63,7 +62,7 @@ namespace SalieriCLI
             {
                 Console.WriteLine("Enter keyword to analyze and press enter");
                 string searchkey = Console.ReadLine();
-                if(string.IsNullOrEmpty(searchkey))
+                if (string.IsNullOrEmpty(searchkey))
                 {
                     break;
                 }
@@ -76,6 +75,37 @@ namespace SalieriCLI
                 Console.WriteLine("Enter keyword to analyze and press enter, or just press enter to exit");
             }
             Console.ReadLine();
+
+        }
+
+        private static Corpus LoadFromGoogle(string keywords)
+        {
+            GoogleLoader loader = new GoogleLoader();
+            loader.keywords = keywords;
+
+            Console.WriteLine("Start Salieri");
+            Console.WriteLine("Scraping !!");
+
+            //loader.keywords = "disclosure management software";
+            string result = loader.Load();
+
+
+            Console.WriteLine("Generating Corpus");
+            Corpus corpus = new Corpus(loader.Contents);
+            return corpus;
+            
+        }
+
+        private static Corpus LoadFromHTML(string url)
+        {
+            Console.WriteLine("Loading from URL " + url);
+            HTMLLoader loader = new HTMLLoader();
+            loader.sourceURL = url;
+            string result = loader.Load();
+
+            Console.WriteLine("Generating Corpus");
+            Corpus corpus = new Corpus(loader.Contents);
+            return corpus;
         }
     }
 }

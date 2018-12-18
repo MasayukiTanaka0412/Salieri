@@ -71,6 +71,8 @@
     <Compile Include="Corpus\Corpus.cs" />
     <Compile Include="Dao\ContentDao.cs" />
     <Compile Include="Loader\GoogleLoader.cs" />
+    <Compile Include="Loader\HTMLLoader.cs" />
+    <Compile Include="Loader\WebLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Word2VecHelper\W2VHelper.cs" />
     <Compile Include="WordCloud\WcGenerator.cs" />
