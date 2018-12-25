@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriWeb", "SalieriWeb\Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriLocalFileExtractor", "SalieriLocalFileExtractor\SalieriLocalFileExtractor.csproj", "{4B59B56A-5B25-486F-B6D3-0467C2C8997F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriCSVCreator", "SalieriCSVCreator\SalieriCSVCreator.csproj", "{549D8C4D-BC42-4A14-A61C-0EB1512BF0F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriOutlookMailExtractor", "SalieriOutlookMailExtractor\SalieriOutlookMailExtractor.csproj", "{C97E36F5-814C-4469-B146-11C181843DA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{4B59B56A-5B25-486F-B6D3-0467C2C8997F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B59B56A-5B25-486F-B6D3-0467C2C8997F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B59B56A-5B25-486F-B6D3-0467C2C8997F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549D8C4D-BC42-4A14-A61C-0EB1512BF0F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549D8C4D-BC42-4A14-A61C-0EB1512BF0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549D8C4D-BC42-4A14-A61C-0EB1512BF0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549D8C4D-BC42-4A14-A61C-0EB1512BF0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C97E36F5-814C-4469-B146-11C181843DA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C97E36F5-814C-4469-B146-11C181843DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C97E36F5-814C-4469-B146-11C181843DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C97E36F5-814C-4469-B146-11C181843DA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

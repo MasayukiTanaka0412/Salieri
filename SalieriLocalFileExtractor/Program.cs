@@ -47,6 +47,7 @@ namespace SalieriLocalFileExtractor
                     //Console.WriteLine(textExtractionResult.Metadata.ToString());
                     //Console.WriteLine(textExtractionResult.Text);
                     //Console.ReadLine();
+                    //元のパスも含めてファイル名にしないと同盟ファイルが上書きされる
                     using (StreamWriter sw = new StreamWriter(outputDirectory + @"\" + Path.GetFileName(path) + ".txt"))
                     {
                         foreach(string key in textExtractionResult.Metadata.Keys)
