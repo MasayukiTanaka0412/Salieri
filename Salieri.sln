@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriCSVCreator", "Salier
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriOutlookMailExtractor", "SalieriOutlookMailExtractor\SalieriOutlookMailExtractor.csproj", "{C97E36F5-814C-4469-B146-11C181843DA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalieriSlackExtractor", "SalieriSlackExtractor\SalieriSlackExtractor.csproj", "{8A8FE34B-53EB-4AEA-BBDD-88EA80FAD9F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{C97E36F5-814C-4469-B146-11C181843DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C97E36F5-814C-4469-B146-11C181843DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C97E36F5-814C-4469-B146-11C181843DA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A8FE34B-53EB-4AEA-BBDD-88EA80FAD9F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8FE34B-53EB-4AEA-BBDD-88EA80FAD9F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8FE34B-53EB-4AEA-BBDD-88EA80FAD9F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8FE34B-53EB-4AEA-BBDD-88EA80FAD9F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
